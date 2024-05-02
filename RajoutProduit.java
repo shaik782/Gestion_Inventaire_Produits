@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class RajoutProduit {
 
     public static void main(String[] args){
@@ -12,13 +14,13 @@ public class RajoutProduit {
         System.out.println("Donner la couleur de la voiture");
         String couleur = scanner.nextLine();
         System.out.println("Donner l'année de production de la voiture");
-        String couleur = scanner.nextLine();
+        String couleur1 = scanner.nextLine();
         System.out.println("Donner le prix unitaire de la voiture");
         System.out.println("Donner la quantité de cette voiture");
         System.out.println("Donner le nombre de place dans cette voiture");
         System.out.println("8. Quitter");
         System.out.print("Entrez votre choix: ");
-        return 
+        return;
     }
 
 }

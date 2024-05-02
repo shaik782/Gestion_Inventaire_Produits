@@ -1,5 +1,3 @@
-package voiture;
-
 import java.util.Objects;
 
 public class Voiture {
