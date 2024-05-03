@@ -73,7 +73,8 @@ public class MainInsererProduit {
 	private static Voiture updateProduct() {
 		Voiture voiture = new Voiture();
 		try {
-			System.out.println("Ajout Produit : ");
+			
+			System.out.println("========================= AJOUT PRODUIT =================================");
 			System.out.println("Indiquez la marque : ");
 			voiture.setMarque(sc.next());
 			System.out.println("Indiquez le modele : ");
@@ -98,6 +99,8 @@ public class MainInsererProduit {
 			return updateProduct();
 
 		}
+		System.out.println("========================= Détail du produit ajouté =================================");
+
 		return voiture;
 		
 	}
