@@ -3,7 +3,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
 
 public class Importation {
 
@@ -13,6 +15,7 @@ public class Importation {
 		try {
 			parseCSVData();
 		} catch (IOException e) {
+			System.err.println("Erreur lors de la lecture du fichier CSV.");
 			e.printStackTrace();
 		}
 	}
@@ -31,38 +34,94 @@ public class Importation {
 					int annee = Integer.parseInt(data[5].trim());
 					float prix = Float.parseFloat(data[6].trim());
 					int quantite = Integer.parseInt(data[7].trim());
-					Connection connected = Connexion.Connect();
+
+					// Get connection from Connexion class
+					Connection connexion = Connexion.Connect();
 
 					try {
-						
-						PreparedStatement ps = connected.prepareStatement(
-							"INSERT INTO produit(marque, modele, categorie, couleur, nombrePlace, annee, prix ,quantite) VALUES(?,?,?,?,?,?,?,?)"); 						{
-						ps.setString(1, marque);
-						ps.setString(2, modele);
-						ps.setString(3, categorie);
-						ps.setString(4, couleur);
-						ps.setInt(5, nombrePlace);
-						ps.setInt(6, annee);
-						ps.setDouble(7, prix);
-						ps.setInt(8, quantite);
+						// Check si la voiture existe dans la base de donnee
+						boolean exists = checkIfExists(connexion, marque, modele, categorie, couleur, nombrePlace,
+								annee, prix);
 
-						
-						ps.executeUpdate();
+						if (exists) {
+							// si elle existe update la quantite
+							updateQuantite(connexion, marque, modele, categorie, couleur, nombrePlace, annee, prix,
+									quantite);
+						} else {
+							// If it doesn't exist, insert a new row with the provided values
+							insertNewRow(connexion, marque, modele, categorie, couleur, nombrePlace, annee, prix,
+									quantite);
 						}
 					} catch (SQLException e) {
+						System.err.println("Erreur lors de l'exécution de la requête SQL.");
 						e.printStackTrace();
+					} finally {
+						try {
+							connexion.close();
+						} catch (SQLException e) {
+							System.err.println("Erreur lors de la fermeture de la connexion à la base de données.");
+							e.printStackTrace();
+						}
 					}
-					try {
-						connected.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				// On sort du if s'il n'y a pas 8 elemenets
 				} else {
 					System.err.println("Erreur: La ligne ne contient pas assez de données.");
 				}
 			}
 		}
+	}
+
+	// Method to check if the combination of marque, modele, categorie, couleur,
+	// nombrePlace, annee, and prix already exists in the database
+	public static boolean checkIfExists(Connection connexion, String marque, String modele, String categorie,
+			String couleur, int nombrePlace, int annee, float prix) throws SQLException {
+		PreparedStatement ps = connexion.prepareStatement(
+				"SELECT COUNT(*) FROM produit WHERE marque = ? AND modele = ? AND categorie = ? AND couleur = ? AND nombrePlace = ? AND annee = ? AND prix = ?");
+		ps.setString(1, marque);
+		ps.setString(2, modele);
+		ps.setString(3, categorie);
+		ps.setString(4, couleur);
+		ps.setInt(5, nombrePlace);
+		ps.setInt(6, annee);
+		ps.setFloat(7, prix);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+		rs.close();
+		ps.close();
+		return count > 0;
+	}
+
+	// Fonction qui update la quantite si le produit existe deja
+	public static void updateQuantite(Connection connexion, String marque, String modele, String categorie,
+			String couleur, int nombrePlace, int annee, float prix, int quantite) throws SQLException {
+		PreparedStatement ps = connexion.prepareStatement(
+				"UPDATE produit SET quantite = quantite + ? WHERE marque = ? AND modele = ? AND categorie = ? AND couleur = ? AND nombrePlace = ? AND annee = ? AND prix = ?");
+		ps.setInt(1, quantite);
+		ps.setString(2, marque);
+		ps.setString(3, modele);
+		ps.setString(4, categorie);
+		ps.setString(5, couleur);
+		ps.setInt(6, nombrePlace);
+		ps.setInt(7, annee);
+		ps.setFloat(8, prix);
+		ps.executeUpdate();
+		ps.close();
+	}
+
+	// Fonction qui cree la ligne si le produit n'existe pas
+	public static void insertNewRow(Connection connexion, String marque, String modele, String categorie,
+			String couleur, int nombrePlace, int annee, float prix, int quantite) throws SQLException {
+		PreparedStatement ps = connexion.prepareStatement(
+				"INSERT INTO produit(marque, modele, categorie, couleur, nombrePlace, annee, prix, quantite) VALUES(?,?,?,?,?,?,?,?)");
+		ps.setString(1, marque);
+		ps.setString(2, modele);
+		ps.setString(3, categorie);
+		ps.setString(4, couleur);
+		ps.setInt(5, nombrePlace);
+		ps.setInt(6, annee);
+		ps.setFloat(7, prix);
+		ps.setInt(8, quantite);
+		ps.executeUpdate();
+		ps.close();
 	}
 }
