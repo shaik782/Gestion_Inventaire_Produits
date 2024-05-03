@@ -15,7 +15,6 @@ public class Connexion {
 		// Créer une connexion
 		try {
 			connexion = DriverManager.getConnection(URL, LOGIN, PSW);
-			System.out.println("Je suis connecté à ma base de données :-D");
 		} catch (SQLException e) {
 			System.out.println("Erreur de connexion");
 			e.printStackTrace();
