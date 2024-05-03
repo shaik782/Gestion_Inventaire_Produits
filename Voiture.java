@@ -8,8 +8,9 @@ public class Voiture {
 	private String couleur;
 	private int nombrePlace;
 	private int annee;
-	private float prix;
+	private double prix;
 	private int quantite;
+	
 	public int getNumSerie() {
 		return numSerie;
 	}
@@ -52,10 +53,10 @@ public class Voiture {
 	public void setAnnee(int annee) {
 		this.annee = annee;
 	}
-	public float getPrix() {
+	public double getPrix() {
 		return prix;
 	}
-	public void setPrix(float prix) {
+	public void setPrix(double prix) {
 		this.prix = prix;
 	}
 	public int getQuantite() {
@@ -65,7 +66,7 @@ public class Voiture {
 		this.quantite = quantite;
 	}
 	public Voiture(int numSerie, String marque, String modele, String categorie, String couleur, int nombrePlace,
-			int annee, float prix, int quantite) {
+			int annee, double prix, int quantite) {
 		super();
 		this.numSerie = numSerie;
 		this.marque = marque;
@@ -102,9 +103,10 @@ public class Voiture {
 		return annee == other.annee && Objects.equals(categorie, other.categorie)
 				&& Objects.equals(couleur, other.couleur) && Objects.equals(marque, other.marque)
 				&& Objects.equals(modele, other.modele) && nombrePlace == other.nombrePlace
-				&& numSerie == other.numSerie && Float.floatToIntBits(prix) == Float.floatToIntBits(other.prix)
+				&& numSerie == other.numSerie && Double.doubleToLongBits(prix) == Double.doubleToLongBits(other.prix)
 				&& quantite == other.quantite;
 	}
+	
 
 	
 }
