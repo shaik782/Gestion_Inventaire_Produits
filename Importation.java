@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 public class Importation {
 
@@ -28,7 +31,20 @@ public class Importation {
                     int annee = Integer.parseInt(data[5].trim());
                     float prix = Float.parseFloat(data[6].trim());
                     int quantite = Integer.parseInt(data[7].trim());
-
+                    
+                    Connection connected = Connexion.Connect();
+            		
+                    
+            		Statement requete = connected.createStatement();
+            		try (PreparedStatement ps = requete.prepareStatement("INSERT INTO produit(marque, modele, categorie, couleur, nombrePlace, annee, prix ,quantite) VALUES(?,?,?,?,?,?,?,?)")) {                    ps.setString(1,marque);
+        			ps.setString(2, modele);
+        			ps.setString(3, categorie);
+        			ps.setString(4, couleur);
+        			ps.setInt(5, nombrePlace);
+        			ps.setInt(6, annee);
+        			ps.setDouble(7, prix);
+        			ps.setInt(8, quantite);
+                    
                     // Utilisez les variables selon vos besoins
                     System.out.println("Marque: " + marque);
                     System.out.println("Modele: " + modele);
@@ -44,5 +60,4 @@ public class Importation {
                 }
             }
         }
-    }
-}
+       }
