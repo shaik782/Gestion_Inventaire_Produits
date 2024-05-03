@@ -26,8 +26,8 @@ public class MainInsererProduit {
 			Statement requete = connexion.createStatement();	
 
 
-			// Modifier voiture
-			Voiture voiture = updateProduct();
+			// Insérer voiture
+			Voiture voiture = addProduct();
 			PreparedStatement ps = connexion.prepareStatement("INSERT INTO produit(marque, modele, categorie, couleur, nombrePlace, annee, prix ,quantite) VALUES(?,?,?,?,?,?,?,?)");
 			ps.setString(1, voiture.getMarque());
 			ps.setString(2, voiture.getModele());
@@ -70,7 +70,7 @@ public class MainInsererProduit {
 
 	}
 	
-	private static Voiture updateProduct() {
+	private static Voiture addProduct() {
 		Voiture voiture = new Voiture();
 		try {
 			
@@ -96,7 +96,7 @@ public class MainInsererProduit {
 
 		} catch (RuntimeException e) {
 			System.out.println("IL FAUT SAISIR DE NOUVEAU !");
-			return updateProduct();
+			return addProduct();
 
 		}
 		System.out.println("========================= Détail du produit ajouté =================================");
