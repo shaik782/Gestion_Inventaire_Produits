@@ -12,15 +12,14 @@ public class MainConnection {
 	private static final String LOGIN = "root";
 	private static final String PSW = "password";
 
-	public static void main(String[] args) {
+	public static Connection connect() {
 		// Créer une connexion
 		try {
 			Connection connexion = DriverManager.getConnection(URL, LOGIN, PSW);
 			System.out.println("Je suis connecté à ma base de données :-D");
 
-			// Utiliser la connexoin pour exécuter des ordres SQL
-			Statement requete = connexion.createStatement();
-			ResultSet listeProduits = requete.executeQuery("SELECT * FROM produit");
+			// Utiliser la connexion pour exécuter des ordres SQL
+			return connexion
 			
 			// Parcourir les résultat
 		}catch (SQLException e) {

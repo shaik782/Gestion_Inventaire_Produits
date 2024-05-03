@@ -1,4 +1,5 @@
 public class RajoutProduit extends MainConnection {
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Rajout d'une voiture:");
@@ -20,9 +21,9 @@ public class RajoutProduit extends MainConnection {
         String nbplace = scanner.nextInt();
         System.out.println("8. Quitter");
         System.out.print("Entrez votre choix: ");
+        Connection connect = MainConnection.connect();
         Statement requete = connexion.createStatement();
         ResultSet listeProduits = requete.executeQuery("SELECT * FROM produit");
-        return 
     }
 
 }
